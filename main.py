@@ -5,7 +5,7 @@ from textwrap import dedent
 from agents import SEOCrewAgents
 from tasks import SEOCrewTaks
 
-
+os.environ["CHROMADB_USE_REMOTE"] = "true"
 class SEOCrew:
     def __init__(self, inputs, log_callback=None):
         self.inputs = inputs

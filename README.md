@@ -1,6 +1,6 @@
-# SEO Crew AI
+# SEOCrew
+A SEO analysis and optimization tool built with CrewAI. This project uses multiple AI agents working together to provide comprehensive SEO analysis and recommendations for websites.
 
-A powerful AI-powered SEO analysis and optimization tool built with CrewAI. This project uses multiple AI agents working together to provide comprehensive SEO analysis and recommendations for websites.
 
 ## Features
 
@@ -101,13 +101,11 @@ streamlit run streamlit_app.py
 4. Push to the branch
 5. Create a Pull Request
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgments
 
 - CrewAI for the multi-agent framework
 - OpenAI for the language models
 - Serper for search capabilities
-- Streamlit for the web interface and secrets management 
+- Streamlit for the web interface and secrets management
+- Hector Pineda (YT: @Hector.levelup) for the fantastic videos and structure for this project

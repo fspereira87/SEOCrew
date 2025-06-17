@@ -11,3 +11,4 @@ python-dotenv==1.0.0
 PyYAML==6.0.2
 pyyaml_env_tag==0.1
 python-decouple==3.8
+sqlite3 == 3.35.0

@@ -1,5 +1,5 @@
-crewai==0.28.8
-crewai-tools==0.1.7
+crewai
+crewai-tools
 langchain==0.1.20
 langchain-cohere==0.1.5
 langchain-community==0.0.38

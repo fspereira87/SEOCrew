@@ -1,5 +1,6 @@
-crewai
-crewai-tools
+crewai==0.121.1
+crewai-tools==0.45.0
+chromadb>=0.5.23
 crewai[chroma]
 langchain==0.1.20
 langchain-cohere==0.1.5
@@ -13,5 +14,6 @@ PyYAML==6.0.2
 pyyaml_env_tag==0.1
 python-decouple==3.8
 pysqlite3-binary
+
 
 

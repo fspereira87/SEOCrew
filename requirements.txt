@@ -1,5 +1,6 @@
 crewai
 crewai-tools
+crewai.rag.chromadb.factory
 langchain==0.1.20
 langchain-cohere==0.1.5
 langchain-community==0.0.38
@@ -12,3 +13,4 @@ PyYAML==6.0.2
 pyyaml_env_tag==0.1
 python-decouple==3.8
 pysqlite3-binary
+

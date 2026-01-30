@@ -2,6 +2,10 @@ import streamlit as st
 from main import SEOCrew  # Import the SalesCrew class from main.py
 from dotenv import load_dotenv
 import os
+from crewai.rag.config.utils import set_rag_config
+from crewai.rag.chromadb.config import ChromaDBConfig
+
+set_rag_config(ChromaDBConfig())
 
 st.set_page_config(page_title="Your Magic Team", layout="wide")
 

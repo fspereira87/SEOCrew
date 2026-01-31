@@ -1,41 +1,98 @@
 from crewai import Task
 
-class SEOCrewTaks:
-    
-    def seo_analyses_task(self, agent, inputs):
+
+class SEOCrewTasks:
+
+    def seo_analyses_task(self, agent, website_url):
         return Task(
-            agent = agent,
-            description = f"Conduct a comprehensive SEO audit of the all website {inputs} covering keyword usage, meta tags, site structure, backlinks, and content quality.",
-            expected_output = f"A comprehensive SEO audit report that details current performance metrics (including PageSpeed scores, crawl errors, etc.), a prioritized list of issues, industry-specific benchmarks, and actionable recommendations tailored to the website’s niche."
+            agent=agent,
+            description=(
+                f"Conduct a comprehensive SEO audit of the website {website_url}. "
+                "Analyze keyword usage, meta tags, site structure, backlinks, and content quality. "
+                "Use available tools where appropriate to gather factual insights."
+            ),
+            expected_output=(
+                "A comprehensive SEO audit report detailing current performance metrics "
+                "(crawlability, indexing issues, PageSpeed indicators), a prioritized list of SEO issues, "
+                "benchmarks, and actionable recommendations."
+            ),
+            config={}
         )
-    
-    def content_specialist_task(self, agent, context, inputs):
+
+    def technical_seo_task(self, agent, website_url, seo_audit_task):
         return Task(
-            agent = agent,
-            description = f"Based on the seo analyst agent report, and after analyzing {inputs} website content alongside competitor material, then propose topic ideas, formats, and keyword-focused improvements.",
-            expected_output = f"A detailed content strategy document that includes a content gap analysis, a shortlist of targeted long-tail keywords and phrases, competitive content comparisons, and specific recommendations for content updates and new topic ideas aligned with the website’s target audience."
+            agent=agent,
+            depends_on=[seo_audit_task],
+            description=(
+                f"Based on the SEO audit findings, evaluate the technical SEO aspects of {website_url}, "
+                "including site architecture, performance, mobile usability, URL structure, "
+                "internal linking, and structured data."
+            ),
+            expected_output=(
+                "A technical SEO audit report with performance metrics, "
+                "a prioritized list of technical issues, and step-by-step fixes."
+            ),
+            config={}
         )
-        
-    def technical_seo_task(self, agent, inputs):
+
+    def content_specialist_task(self, agent, website_url, seo_audit_task):
         return Task(
-            agent = agent,
-            description = f"Evaluate the {inputs} website's architecture, loading speed, mobile responsiveness, URL structure, and schema markup.",
-            expected_output = f"A technical SEO audit report featuring specific metrics (e.g., mobile performance scores, load times, structured data validation results), a prioritized list of technical issues, and detailed, step-by-step recommendations for addressing each issue."
+            agent=agent,
+            depends_on=[seo_audit_task],
+            description=(
+                f"Using insights from the SEO audit, analyze the content of {website_url}. "
+                "Identify content gaps, keyword opportunities, and competitive weaknesses. "
+                "Propose content topics, formats, and optimization strategies aligned with search intent."
+            ),
+            expected_output=(
+                "A detailed content strategy including content gap analysis, "
+                "high-potential long-tail keywords, competitive comparisons, "
+                "and recommendations for content updates and new initiatives."
+            ),
+            config={}
         )
-        
-    def link_building_task(self, agent, inputs):
+
+    def link_building_task(self, agent, website_url, seo_audit_task):
         return Task(
-            agent = agent,
-            description = f"Identify potential backlink opportunities, manage outreach campaigns, and monitor the quality of incoming links of the {inputs} website and taking into consideration other agents' output.",
-            expected_output = f"A targeted link building strategy report that identifies industry-specific high-authority websites (backed by competitor analysis), provides a detailed outreach plan (including tactics such as guest blogging and expert roundups), and outlines key performance indicators for tracking link quality and success."
+            agent=agent,
+            depends_on=[seo_audit_task],
+            description=(
+                f"Using findings from the SEO audit, identify backlink opportunities for {website_url}. "
+                "Analyze competitors, industry publications, and authoritative domains "
+                "to design an effective link acquisition strategy."
+            ),
+            expected_output=(
+                "A link building strategy outlining high-authority backlink opportunities, "
+                "recommended outreach tactics, and KPIs for measuring link quality and success."
+            ),
+            config={}
         )
-        
-    def seo_manager_task(self, agent, context, inputs):
+
+    def seo_manager_task(
+        self,
+        agent,
+        website_url,
+        seo_audit_task,
+        technical_task,
+        content_task,
+        link_task
+    ):
         return Task(
-            agent = agent,
-            description = f"Gather and integrate outputs from all SEO team members, including analyses, audits, and strategic recommendations. Compile these into a structured, comprehensive report that provides a holistic view of the website's SEO performance and outlines a clear roadmap for improvement.",
-            expected_output = f"A unified, comprehensive SEO strategy document that integrates detailed findings and recommendations from all disciplines (technical, content, link building, UX/UI, and data analysis). It should feature an executive summary, industry-specific benchmarks, a prioritized roadmap with clear KPIs and timelines, and actionable steps for enhancing the website’s overall SEO performance."
+            agent=agent,
+            depends_on=[
+                seo_audit_task,
+                technical_task,
+                content_task,
+                link_task
+            ],
+            description=(
+                f"Aggregate and synthesize all SEO findings for {website_url}. "
+                "Produce a unified, executive-level SEO strategy and improvement roadmap."
+            ),
+            expected_output=(
+                "A comprehensive SEO strategy document with an executive summary, "
+                "integrated insights from all analyses, a prioritized action roadmap, "
+                "defined KPIs, and implementation timelines."
+            ),
+            config={}
         )
-        
-    
-        

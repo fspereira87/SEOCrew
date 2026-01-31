@@ -1,17 +1,14 @@
-import os
-from decouple import config
 from crewai import Crew, Process
-from textwrap import dedent
 from agents import SEOCrewAgents
-from tasks import SEOCrewTaks
+from tasks import SEOCrewTasks
 
 
 class SEOCrew:
-    def __init__(self, inputs, log_callback=None):
-        self.inputs = inputs
+    def __init__(self, website_url, log_callback=None):
+        self.website_url = website_url
         self.agents = SEOCrewAgents()
-        self.tasks = SEOCrewTaks()
-        self.log_callback = log_callback or (lambda x: None)  # default to no-op
+        self.tasks = SEOCrewTasks()
+        self.log_callback = log_callback or (lambda x: None)
 
     def log(self, message):
         print(message)
@@ -26,37 +23,61 @@ class SEOCrew:
         manager = self.agents.seo_project_manager()
 
         self.log("📌 Defining tasks...")
-        analyst_task = self.tasks.seo_analyses_task(seo_analyst, self.inputs)
-        content_task = self.tasks.content_specialist_task(content, [analyst_task.output], self.inputs)
-        technical_task = self.tasks.technical_seo_task(technical, self.inputs)
-        link_building_task = self.tasks.link_building_task(link_builder, self.inputs)
+
+        # Base audit (root task)
+        analyst_task = self.tasks.seo_analyses_task(
+            seo_analyst,
+            self.website_url
+        )
+
+        # Dependent tasks
+        technical_task = self.tasks.technical_seo_task(
+            technical,
+            self.website_url,
+            analyst_task
+        )
+
+        content_task = self.tasks.content_specialist_task(
+            content,
+            self.website_url,
+            analyst_task
+        )
+
+        link_building_task = self.tasks.link_building_task(
+            link_builder,
+            self.website_url,
+            analyst_task
+        )
+
+        # Manager depends on everything
         manager_task = self.tasks.seo_manager_task(
             manager,
-            [analyst_task.output, content_task.output, technical_task.output, link_building_task.output],
-            self.inputs
+            self.website_url,
+            analyst_task,
+            technical_task,
+            content_task,
+            link_building_task
         )
 
         self.log("🚀 Kicking off Crew...")
         crew = Crew(
-            agents=[seo_analyst, content, technical, link_builder, manager],
-            tasks=[analyst_task, content_task, technical_task, link_building_task, manager_task],
+            agents=[
+                seo_analyst,
+                content,
+                technical,
+                link_builder,
+                manager
+            ],
+            tasks=[
+                analyst_task,
+                technical_task,
+                content_task,
+                link_building_task,
+                manager_task
+            ],
             process=Process.sequential
         )
 
         result = crew.kickoff()
         self.log("✅ Crew process completed.")
         return result
-
-
-# CLI entry point
-# if __name__ == "__main__":
-#     print("👋 Welcome to the SEO Crew CLI")
-#     print("-------------------------------")
-#     topic = input("Enter the website to be analysed: ")
-    
-#     seo_crew = SEOCrew(topic)
-#     result = seo_crew.run()
-
-#     print("\n📊 SEO Crew Results:")
-#     print("-------------------------------")
-#     print(result)

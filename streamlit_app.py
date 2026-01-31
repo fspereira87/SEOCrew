@@ -1,57 +1,55 @@
-import streamlit as st
-from main import SEOCrew  # Import the SalesCrew class from main.py
-from dotenv import load_dotenv
 import os
-from crewai.rag.config.utils import set_rag_config
-from crewai.rag.chromadb.config import ChromaDBConfig
+import streamlit as st
+from main import SEOCrew
+from dotenv import load_dotenv
 
-set_rag_config(ChromaDBConfig())
+# Load local .env if present
+load_dotenv()
 
 st.set_page_config(page_title="Your Magic Team", layout="wide")
 
-# Set environment variables from secrets
-os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
-os.environ["SERPER_API_KEY"] = st.secrets["SERPER_API_KEY"]
+    
+    #st.secrets["OPENAI_API_KEY"]
 
-# ---- SIDEBAR: Agent Info ----
+# ---- SIDEBAR ----
 with st.sidebar:
     st.header('👥 The Agent Team')
     st.markdown("""
 **🔍 SEO Analyst**  
-Identify key issues across on-page, off-page, and technical areas to improve search rankings.
+Identify key issues across on-page, off-page, and technical areas.
 
 **📝 Content Strategist**  
-Recommend content improvements and identify new opportunities to target relevant keywords effectively.
+Recommend content improvements and new keyword opportunities.
 
 **🛠️ Technical SEO Specialist**  
-Ensure that the website’s technical infrastructure is optimized for search engine performance.
+Optimize technical infrastructure and performance.
 
 **🔗 Link Building Specialist**  
-Increase the website’s domain authority and boost search rankings through ethical, sustainable link building practices.
+Grow authority through ethical link acquisition.
 
 **📋 SEO Project Manager**  
-Oversee the entire SEO project, ensuring all tasks are completed on time and meet quality standards.
+Compile findings into a clear SEO roadmap.
 """)
 
-# ---- MAIN AREA ----
+# ---- MAIN ----
 st.title('Your Magic Team')
 
 st.subheader("Enter the Website URL to Analyse")
-topic = st.text_input("Main website (only English websites are supported):")
+website_url = st.text_input("Website URL (English only):")
 
-if st.button('Run analyse'):
-    if not topic:
+if st.button('Run analysis'):
+    if not website_url:
         st.error("Please enter a website URL.")
     else:
         st.subheader("🚀 Running SEO Analysis...")
         log_area = st.empty()
-
         logs = []
+
         def stream_log(log_line):
             logs.append(log_line)
             log_area.markdown("```\n" + "\n".join(logs) + "\n```")
 
-        seo_crew = SEOCrew(topic, log_callback=stream_log)
+        seo_crew = SEOCrew(website_url, log_callback=stream_log)
         result = seo_crew.run()
 
         st.subheader("🔎 SEO Analysis Results")

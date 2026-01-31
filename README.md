@@ -1,111 +1,167 @@
-# SEOCrew
-A SEO analysis and optimization tool built with CrewAI. This project uses multiple AI agents working together to provide comprehensive SEO analysis and recommendations for websites.
+SEOCrew
 
+SEOCrew is a multi-agent SEO analysis and optimization tool built with CrewAI.
+It uses a team of specialized AI agents, each equipped with custom tools, to collaboratively analyze websites and produce a comprehensive SEO strategy.
 
-## Features
+The project includes a Streamlit web interface, an agent-level tooling layer for search and web scraping, and a task dependency graph to ensure structured execution.
 
-- **Multi-Agent SEO Analysis**: Utilizes specialized AI agents for different aspects of SEO
-- **Comprehensive Analysis**: Covers technical SEO, content strategy, link building, and more
-- **Streamlit Interface**: User-friendly web interface for easy interaction
-- **Secure API Key Management**: Uses Streamlit secrets for secure API key storage
+Features
 
-## Project Structure
+Multi-agent SEO analysis using specialized agents for different SEO domains.
 
-```
-.
-├── .venv-filipe/           # Virtual environment
-├── agents.py              # Agent definitions
-├── tasks.py               # Task definitions
-├── main.py               # Main application logic
-├── streamlit_app.py      # Streamlit web interface
-├── .streamlit/           # Streamlit configuration
-│   └── secrets.toml     # API keys and secrets
-└── pyproject.toml        # Project dependencies
-```
+Agent-level tooling with web search and website scraping capabilities.
 
-## Agents
+Task dependency graph implemented using CrewAI depends_on for deterministic execution and automatic context sharing.
+
+Comprehensive SEO coverage including audits, content strategy, technical SEO, link building, and executive reporting.
+
+Streamlit web interface with live execution logs and final results.
+
+Secure API key management using environment variables and Streamlit secrets.
+
+Agent Team
 
 The project uses five specialized agents:
 
-1. **SEO Analyst**: Conducts comprehensive SEO audits
-2. **Content Strategist**: Analyzes and improves content strategy
-3. **Technical SEO Specialist**: Evaluates technical aspects of the website
-4. **Link Building Specialist**: Identifies backlink opportunities
-5. **SEO Project Manager**: Coordinates and integrates all findings
+SEO Analyst
+Conducts comprehensive SEO audits using search and scraping tools.
 
-## Setup
+Content Strategist
+Analyzes content quality, identifies gaps, and proposes keyword-driven improvements.
 
-1. **Install Poetry** (if not already installed):
-   ```bash
-   pip install poetry
-   ```
+Technical SEO Specialist
+Evaluates site architecture, performance, mobile readiness, and technical SEO issues.
 
-2. **Install Dependencies**:
-   ```bash
-   poetry install
-   ```
+Link Building Specialist
+Identifies backlink opportunities and authority-building strategies.
 
-3. **Set Up Streamlit Secrets**:
-   Create a `.streamlit/secrets.toml` file with the following structure:
-   ```toml
-   [secrets]
-   OPENAI_API_KEY = "your_openai_api_key"
-   SERPER_API_KEY = "your_serper_api_key"
-   ```
+SEO Project Manager
+Aggregates all findings into a unified, actionable SEO roadmap.
 
-   Note: The `.streamlit/secrets.toml` file should never be committed to version control. Each developer/server should maintain their own secrets file.
+Tools Layer
 
-4. **Activate Virtual Environment**:
-   ```bash
-   poetry env activate
-   ```
+SEOCrew includes a dedicated tools layer that is attached directly to agents in agents.py.
 
-## Usage
+The available tools are:
 
-### Command Line Interface
+DuckDuckGoSearchTool (tools/search.py)
+Used by agents to perform real-time search queries for competitive analysis, keyword research, and SERP insights.
 
-Run the application from the command line:
-```bash
-python main.py
-```
+ScrapeWebsiteTool (tools/web_scraper.py)
+Used by agents to scrape website content and structure, enabling analysis of page content, headings, metadata, and on-page SEO signals.
 
-### Web Interface
+Tools are registered on agents and invoked autonomously during task execution. Tasks themselves do not call tools directly.
 
-Launch the Streamlit web interface:
-```bash
+Project Structure
+.
+├── agents.py               # Agent definitions and tool assignment
+├── tasks.py                # Task definitions with depends_on
+├── main.py                 # Crew orchestration logic
+├── streamlit_app.py        # Streamlit web interface
+├── tools/
+│   ├── search.py           # DuckDuckGo search tool
+│   └── web_scraper.py      # Website scraping tool
+├── .streamlit/
+│   └── secrets.toml        # API keys (not committed)
+├── pyproject.toml          # Project dependencies
+└── README.md
+
+Setup
+
+Install Poetry if it is not already installed:
+
+pip install poetry
+
+
+Install project dependencies:
+
+poetry install
+
+
+Set up API keys.
+
+For local development, create a .env file in the project root:
+
+OPENAI_API_KEY=your_openai_api_key
+
+
+For Streamlit Cloud or production use, create .streamlit/secrets.toml:
+
+OPENAI_API_KEY = "your_openai_api_key"
+
+
+The secrets file must never be committed to version control.
+
+Activate the virtual environment:
+
+poetry env activate
+
+Usage
+
+To launch the Streamlit web interface:
+
 streamlit run streamlit_app.py
-```
-
-## Security Notes
-
-- API keys are stored securely in Streamlit secrets
-- Each environment (development, staging, production) should have its own secrets file
-- Never commit the secrets.toml file to version control
-- For production deployment, use the Streamlit Cloud secrets management interface
-
-## Dependencies
-
-- crewai
-- langchain-openai
-- python-dotenv
-- crewai-tools
-- streamlit
-- pyyaml
-- setuptools
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
 
 
-## Acknowledgments
+Enter a website URL, run the analysis, follow the live execution logs, and review the final SEO report.
 
-- CrewAI for the multi-agent framework
-- OpenAI for the language models
-- Serper for search capabilities
-- Streamlit for the web interface and secrets management
-- Hector Pineda (YT: @Hector.levelup) for the fantastic videos and structure for this project
+For programmatic or CLI usage:
+
+python main.py
+
+
+This is useful for debugging, automation, or extending the project.
+
+Execution Flow
+
+The SEO Analyst performs the initial audit.
+
+Technical SEO, Content Strategy, and Link Building tasks run after the audit based on task dependencies.
+
+The SEO Project Manager runs last and synthesizes all findings into a single strategy document.
+
+All context is passed automatically via task dependencies. No manual output or context plumbing is required.
+
+Security Notes
+
+API keys are loaded via environment variables or Streamlit secrets.
+
+No credentials are hardcoded in the codebase.
+
+Each environment should manage its own secrets.
+
+For production deployment, Streamlit Cloud secrets management is recommended.
+
+Dependencies
+
+crewai
+crewai-tools
+langchain-openai
+streamlit
+python-dotenv
+pyyaml
+setuptools
+
+Contributing
+
+Fork the repository.
+
+Create a feature branch.
+
+Commit your changes.
+
+Push to the branch.
+
+Open a Pull Request.
+
+Acknowledgments
+
+CrewAI for the multi-agent orchestration framework.
+
+OpenAI for the language models.
+
+DuckDuckGo for search data.
+
+Streamlit for the web interface and secrets management.
+
+Hector Pineda (YouTube: @Hector.levelup) for inspiration and project structure.

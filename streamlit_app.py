@@ -6,6 +6,11 @@ from dotenv import load_dotenv
 # Load local .env if present
 load_dotenv()
 
+
+if "OPENAI_API_KEY" not in os.environ:
+    os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+
+
 st.set_page_config(page_title="Your Magic Team", layout="wide")
 
     
